@@ -352,6 +352,17 @@ ggraph(tweets_mentions, layout = "fr") +
     theme(legend.position = "none")
 ```
 
+```{r d3_heatmap}
+tweets %>% 
+dplyr::filter(!is.na(mentions_screen_name)) %>% 
+dplyr::select(screen_name, mentions_screen_name) %>% 
+tidyr::unnest(mentions_screen_name) %>% 
+mutate(mentions_screen_name = strsplit(mentions_screen_name, " ")) %>% 
+unnest(mentions_screen_name) %>% mutate(val=1) %>%  reshape2::acast(screen_name~mentions_screen_name,min,fill = 0) %>% d3heatmap::d3heatmap(col=c("white","black"))
+```
+
+
+
 # Tweet types
 
 ## Retweets {.tabset .tabset-pills}
@@ -559,6 +570,19 @@ tweets %>%
     count(word) %>% 
     with(wordcloud(word, n, max.words = 100, min.freq = 3,
                  colors = brewer.pal(6, "Spectral")))
+
+
+tweets %>% 
+     filter(is_retweet == FALSE) %>% 
+     unnest_tokens(word, text) %>% 
+     select(word) %>% 
+     filter(!word %in% c(gsub("#", "", tolower("gensoc100")),
+                         "https", "t.co", "amp"),
+            !word %in% tolower(tweets$screen_name), 
+            !grepl("^\\d+$", word)) %>% 
+     anti_join(stop_words, by = "word") %>%
+     count(freq=word) %>% filter(freq>2) %>% wordcloud2(figPath ="../docs/figures/gensoc100/double-helix-clipart-png.png" )
+
 ```
 
 ## Bigram graph
