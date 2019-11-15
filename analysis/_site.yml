@@ -1,7 +1,7 @@
 name: "twitter-stats"
 output_dir: "../docs"
 navbar:
-  title: "lazappi's Twitter stats"
+  title: "Twitter stats"
   left:
     - text: "Home"
       href: index.html
@@ -9,7 +9,7 @@ navbar:
     - text: "About"
       href: about.html
     - icon: fa-github fa-lg
-      href: https://github.com/lazappi/twitter-stats
+      href: https://github.com/ggrimes/twitter-stats
 output:
   html_document:
     theme: cosmo
